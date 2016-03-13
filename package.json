@@ -1,0 +1,27 @@
+{
+  "name": "packet-buffer-parser",
+  "version": "1.0.0",
+  "description": "Methods to parse binding packet buffers into structured data.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "tape test/**/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NaiveRoboticist/packet-buffer-parser.git"
+  },
+  "keywords": [
+    "parse",
+    "binary",
+    "buffer"
+  ],
+  "author": "Naive Roboticist",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NaiveRoboticist/packet-buffer-parser/issues"
+  },
+  "homepage": "https://github.com/NaiveRoboticist/packet-buffer-parser#readme",
+  "devDependencies": {
+    "blue-tape": "^0.2.0"
+  }
+}
