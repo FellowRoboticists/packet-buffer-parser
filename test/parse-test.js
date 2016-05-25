@@ -1,110 +1,108 @@
-const test = require('blue-tape');
-const parser = require('../lib/index');
+'use strict'
+
+const test = require('blue-tape')
+const parser = require('../lib/index')
 
 test('parse test whole valid packet', (assert) => {
-  var buffer = [ 
-    0x13, 
-    0x0b, 
-    0x07, 0x00, 
-    0x13, 0x23, 0x18, 
-    0x14, 0x00, 0x00, 
-    0x21, 0x01, 0x1f, 
-    -200 
-  ];
+  var buffer = [
+    0x13,
+    0x0b,
+    0x07, 0x00,
+    0x13, 0x23, 0x18,
+    0x14, 0x00, 0x00,
+    0x21, 0x01, 0x1f,
+    -200
+  ]
 
-  parser.reset();
+  parser.reset()
 
-  var b = new Buffer(buffer);
-
-  assert.ok(parser.parse(buffer), 
-            'Should return the packet');
-  assert.end();
-});
+  assert.ok(parser.parse(buffer),
+            'Should return the packet')
+  assert.end()
+})
 
 test('parse incremental', (assert) => {
-  var buffer1 = [ 
-    0x13, 
+  var buffer1 = [
+    0x13,
     0x0b
-  ];
-  var buffer2 = [ 
-    0x07, 0x00, 
-    0x13, 0x23, 0x18, 
-    0x14, 0x00, 0x00, 
-    0x21, 0x01, 0x1f, 
+  ]
+  var buffer2 = [
+    0x07, 0x00,
+    0x13, 0x23, 0x18,
+    0x14, 0x00, 0x00,
+    0x21, 0x01, 0x1f,
     -200,
     0x13
-  ];
+  ]
 
-  parser.reset();
+  parser.reset()
   assert.notOk(parser.parse(buffer1),
-                             'The packet should not be complete');
-  assert.ok(parser.parse(buffer2), 
-            'Should return the packet');
-  assert.end();
-});
+                             'The packet should not be complete')
+  assert.ok(parser.parse(buffer2),
+            'Should return the packet')
+  assert.end()
+})
 
 test('parse byte at a time', (assert) => {
-  parser.reset();
+  parser.reset()
   assert.notOk(parser.parse([ 0x00 ]),
-               'Ignore first byte');
+               'Ignore first byte')
   assert.notOk(parser.parse([ 0x13 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x0b ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x07 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x00 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x13 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x23 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x18 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x14 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x00 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x00 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x21 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x01 ]),
-               'Keep going');
+               'Keep going')
   assert.notOk(parser.parse([ 0x1f ]),
-               'Keep going');
+               'Keep going')
   assert.ok(parser.parse([ -200 ]),
-            'Received valid packet');
-  assert.end();
-});
+            'Received valid packet')
+  assert.end()
+})
 
 test('parse test multiple packets in buffer', (assert) => {
-  var buffer = [ 
+  var buffer = [
     0x13,  // Start of first packet
-    0x0b, 
-    0x07, 0x00, 
-    0x13, 0x23, 0x18, 
-    0x14, 0x00, 0x00, 
-    0x21, 0x01, 0x1f, 
+    0x0b,
+    0x07, 0x00,
+    0x13, 0x23, 0x18,
+    0x14, 0x00, 0x00,
+    0x21, 0x01, 0x1f,
     -200,
     0x13, // Start of second packet
-    0x0b, 
-    0x07, 0x00, 
-    0x13, 0x23, 0x18, 
-    0x14, 0x00, 0x00, 
-    0x21, 0x01, 0x1f, 
-    -200 
-  ];
+    0x0b,
+    0x07, 0x00,
+    0x13, 0x23, 0x18,
+    0x14, 0x00, 0x00,
+    0x21, 0x01, 0x1f,
+    -200
+  ]
 
-  parser.reset();
+  parser.reset()
 
-  var b = new Buffer(buffer);
-
-  assert.ok(parser.parse(buffer), 
-            'Should return the first packet');
-  assert.ok(parser.parse(null), 
-            'Should return the packet');
-  assert.notOk(parser.parse(null), 
-            'Should find no more packets');
-  assert.end();
-});
+  assert.ok(parser.parse(buffer),
+            'Should return the first packet')
+  assert.ok(parser.parse(null),
+            'Should return the packet')
+  assert.notOk(parser.parse(null),
+            'Should find no more packets')
+  assert.end()
+})
